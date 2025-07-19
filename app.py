@@ -14,16 +14,16 @@ with st.expander("📊 Lihat Data"):
     st.dataframe(data.tail(10))
 
 fig, ax = plt.subplots(figsize=(10, 5))
-ax.plot(data['date'], data['actual'], label='Aktual', color='blue')
-ax.plot(data['date'], data['predicted'], label='Prediksi', color='red')
+ax.plot(data['Date'], data['Actual'], label='Aktual', color='blue')
+ax.plot(data['dDate'], data['Predicted'], label='Prediksi', color='red')
 ax.set_title('Prediksi vs Aktual Harga Saham')
 ax.set_xlabel('Tanggal')
-ax.set_ylabel('Harga')
+ax.set_ylabel('Harga Saham')
 ax.legend()
 st.pyplot(fig)
 
 # Kesimpulan sederhana
-if data['prediksi'].iloc[-1] > data['aktual'].iloc[-1]:
+if data['Predicted'].iloc[-1] > data['Actual'].iloc[-1]:
     st.success("Harga diprediksi **naik** dalam waktu dekat 📈")
 else:
     st.error("Harga diprediksi **turun** dalam waktu dekat 📉")
