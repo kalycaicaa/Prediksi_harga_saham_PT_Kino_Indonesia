@@ -4,7 +4,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import plotly.graph_objs as go
 
-st.set_page_config(page_title='Prediksi Saham KINO', layout='centered')
+st.set_page_config(page_title='Prediksi Saham KINO', layout='wide')
 
 st.title("📈 Prediksi Harga Saham PT KINO Indonesia (KINO.JK)")
 st.markdown("Aplikasi ini menampilkan hasil prediksi harga saham PT. KINO INDONESIA Tbk menggunakan model GRU.")
