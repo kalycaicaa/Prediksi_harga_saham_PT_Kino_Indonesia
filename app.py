@@ -14,8 +14,8 @@ with st.expander("📊 Lihat Data"):
     st.dataframe(data.tail(10))
 
 fig, ax = plt.subplots(figsize=(10, 5))
-ax.plot(data['tanggal'], data['aktual'], label='Aktual', color='blue')
-ax.plot(data['tanggal'], data['prediksi'], label='Prediksi', color='red')
+ax.plot(data['date'], data['actual'], label='Aktual', color='blue')
+ax.plot(data['date'], data['predicted'], label='Prediksi', color='red')
 ax.set_title('Prediksi vs Aktual Harga Saham')
 ax.set_xlabel('Tanggal')
 ax.set_ylabel('Harga')
