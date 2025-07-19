@@ -82,7 +82,7 @@ st.plotly_chart(fig, use_container_width=True)
 st.caption("🧠 Model yang digunakan: Gated Recurrent Unit (GRU) | Dataset: KINO.JK")
 
 # Kesimpulan sederhana
-if data['Predicted'].iloc[-1] > data['Actual'].iloc[-1]:
+if data['Predicted'].iloc[-1] > data['Actual'].iloc[-2]:
     st.success("Harga diprediksi **naik** dalam waktu dekat 📈")
 else:
     st.error("Harga diprediksi **turun** dalam waktu dekat 📉")
