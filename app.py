@@ -2,6 +2,7 @@
 import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
+import plotly.graph_objs as go
 
 st.set_page_config(page_title='Prediksi Saham KINO', layout='centered')
 
@@ -78,6 +79,7 @@ fig.update_layout(
 
 # Tampilkan chart
 st.plotly_chart(fig, use_container_width=True)
+st.caption("🧠 Model yang digunakan: Gated Recurrent Unit (GRU) | Dataset: KINO.JK")
 
 # Kesimpulan sederhana
 if data['Predicted'].iloc[-1] > data['Actual'].iloc[-1]:
@@ -85,6 +87,9 @@ if data['Predicted'].iloc[-1] > data['Actual'].iloc[-1]:
 else:
     st.error("Harga diprediksi **turun** dalam waktu dekat 📉")
 
+
+
 # Tombol download
 csv = data.to_csv(index=False).encode('utf-8')
 st.download_button("📥 Download Hasil Prediksi (CSV)", data=csv, file_name="hasil_prediksi.csv", mime="text/csv")
+
