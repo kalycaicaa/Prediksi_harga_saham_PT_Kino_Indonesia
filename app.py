@@ -13,14 +13,71 @@ data = pd.read_csv('hasil_prediksi.csv')
 with st.expander("📊 Lihat Data"):
     st.dataframe(data.tail(10))
 
-fig, ax = plt.subplots(figsize=(10, 5))
-ax.plot(data['Date'], data['Actual'], label='Aktual', color='blue')
-ax.plot(data['Date'], data['Predicted'], label='Prediksi', color='red')
-ax.set_title('Prediksi vs Aktual Harga Saham')
-ax.set_xlabel('Tanggal')
-ax.set_ylabel('Harga Saham')
-ax.legend()
-st.pyplot(fig)
+data['tanggal'] = pd.to_datetime(data['tanggal'])
+
+# Pastikan kolom penting ada
+required_columns = ['tanggal', 'aktual', 'prediksi']
+if not all(col in data.columns for col in required_columns):
+    st.error("❌ Kolom 'tanggal', 'aktual', atau 'prediksi' tidak ditemukan di CSV.")
+    st.write("Kolom yang ditemukan:", data.columns.tolist())
+    st.stop()
+
+# Default: prediksi terakhir
+default_date = data['tanggal'].iloc[-1]
+
+# Pilihan tanggal interaktif
+selected_date = st.date_input("📅 Pilih tanggal untuk ditandai:", default_date,
+                              min_value=data['tanggal'].min(),
+                              max_value=data['tanggal'].max())
+
+# Jika tanggal yang dipilih tidak pas, cari yang paling dekat
+if selected_date not in data['tanggal'].values:
+    selected_date = data['tanggal'].iloc[(data['tanggal'] - pd.to_datetime(selected_date)).abs().argmin()]
+
+# Data untuk marker merah (pada prediksi)
+y_marker = data.loc[data['tanggal'] == selected_date, 'prediksi'].values[0]
+
+# Plot interaktif
+fig = go.Figure()
+
+# Garis aktual & prediksi
+fig.add_trace(go.Scatter(x=data['tanggal'], y=data['aktual'], mode='lines', name='Aktual', line=dict(color='blue')))
+fig.add_trace(go.Scatter(x=data['tanggal'], y=data['prediksi'], mode='lines', name='Prediksi', line=dict(color='red')))
+
+# Garis vertikal putus-putus
+fig.add_shape(
+    type="line",
+    x0=selected_date,
+    y0=data['prediksi'].min(),
+    x1=selected_date,
+    y1=data['prediksi'].max(),
+    line=dict(color="red", width=2, dash="dash"),
+)
+
+# Titik merah di garis prediksi
+fig.add_trace(go.Scatter(
+    x=[selected_date],
+    y=[y_marker],
+    mode='markers',
+    name='Titik yang Dipilih',
+    marker=dict(color='red', size=10)
+))
+
+# Layout: tampilkan bulan saja di sumbu X
+fig.update_layout(
+    title="Visualisasi Prediksi Harga Saham",
+    xaxis_title="Tanggal",
+    yaxis_title="Harga Saham",
+    showlegend=True,
+    xaxis=dict(
+        tickformat='%b %Y',
+        tickangle=-45,
+        dtick="M1"  # 1 bulan
+    )
+)
+
+# Tampilkan chart
+st.plotly_chart(fig, use_container_width=True)
 
 # Kesimpulan sederhana
 if data['Predicted'].iloc[-1] > data['Actual'].iloc[-1]:
