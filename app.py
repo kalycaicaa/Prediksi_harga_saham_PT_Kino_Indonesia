@@ -13,44 +13,44 @@ data = pd.read_csv('hasil_prediksi.csv')
 with st.expander("📊 Lihat Data"):
     st.dataframe(data.tail(10))
 
-data['tanggal'] = pd.to_datetime(data['tanggal'])
+data['Date'] = pd.to_datetime(data['Date'])
 
 # Pastikan kolom penting ada
-required_columns = ['tanggal', 'aktual', 'prediksi']
+required_columns = ['Date', 'Actual', 'Predicted']
 if not all(col in data.columns for col in required_columns):
-    st.error("❌ Kolom 'tanggal', 'aktual', atau 'prediksi' tidak ditemukan di CSV.")
+    st.error("❌ Kolom 'Date', 'Actual', atau 'Predicted' tidak ditemukan di CSV.")
     st.write("Kolom yang ditemukan:", data.columns.tolist())
     st.stop()
 
 # Default: prediksi terakhir
-default_date = data['tanggal'].iloc[-1]
+default_date = data['Date'].iloc[-1]
 
 # Pilihan tanggal interaktif
 selected_date = st.date_input("📅 Pilih tanggal untuk ditandai:", default_date,
-                              min_value=data['tanggal'].min(),
-                              max_value=data['tanggal'].max())
+                              min_value=data['Date'].min(),
+                              max_value=data['Date'].max())
 
 # Jika tanggal yang dipilih tidak pas, cari yang paling dekat
-if selected_date not in data['tanggal'].values:
-    selected_date = data['tanggal'].iloc[(data['tanggal'] - pd.to_datetime(selected_date)).abs().argmin()]
+if selected_date not in data['Date'].values:
+    selected_date = data['Date'].iloc[(data['Date'] - pd.to_datetime(selected_date)).abs().argmin()]
 
 # Data untuk marker merah (pada prediksi)
-y_marker = data.loc[data['tanggal'] == selected_date, 'prediksi'].values[0]
+y_marker = data.loc[data['Date'] == selected_date, 'Predicted'].values[0]
 
 # Plot interaktif
 fig = go.Figure()
 
 # Garis aktual & prediksi
-fig.add_trace(go.Scatter(x=data['tanggal'], y=data['aktual'], mode='lines', name='Aktual', line=dict(color='blue')))
-fig.add_trace(go.Scatter(x=data['tanggal'], y=data['prediksi'], mode='lines', name='Prediksi', line=dict(color='red')))
+fig.add_trace(go.Scatter(x=data['Date'], y=data['Actual'], mode='lines', name='Aktual', line=dict(color='blue')))
+fig.add_trace(go.Scatter(x=data['Date'], y=data['Predicted'], mode='lines', name='Prediksi', line=dict(color='red')))
 
 # Garis vertikal putus-putus
 fig.add_shape(
     type="line",
     x0=selected_date,
-    y0=data['prediksi'].min(),
+    y0=data['Predicted'].min(),
     x1=selected_date,
-    y1=data['prediksi'].max(),
+    y1=data['Predicted'].max(),
     line=dict(color="red", width=2, dash="dash"),
 )
 
