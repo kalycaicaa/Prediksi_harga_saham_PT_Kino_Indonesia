@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 st.set_page_config(page_title='Prediksi Saham KINO', layout='centered')
 
 st.title("📈 Prediksi Harga Saham PT KINO Indonesia (KINO.JK)")
-st.markdown("Aplikasi ini menampilkan hasil prediksi harga saham KINO menggunakan model GRU.")
+st.markdown("Aplikasi ini menampilkan hasil prediksi harga saham PT. KINO INDONESIA Tbk menggunakan model GRU.")
 
 data = pd.read_csv('hasil_prediksi.csv')
 
